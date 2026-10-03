@@ -163,8 +163,7 @@ def check_archives(
     # If max_duration is set, then archives and repository checks need to be run separately, as Borg
     # doesn't support --max-duration along with an archives checks.
     if max_duration and 'archives' in checks and 'repository' in checks:
-        checks.remove('repository')
-        grouped_checks = (checks, {'repository'})
+        grouped_checks = (checks - {'repository'}, {'repository'})
 
     for checks_subset in grouped_checks:
         full_command = (

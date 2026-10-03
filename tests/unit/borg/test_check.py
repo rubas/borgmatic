@@ -557,6 +557,7 @@ def test_check_archives_with_max_duration_option_and_archives_check_runs_reposit
         ('borg', 'check', '--max-duration', '33', '--repository-only', '--log-json', 'repo'),
     )
     insert_logging_mock(logging.WARNING)
+    checks = {'repository', 'archives'}
 
     module.check_archives(
         repository_path='repo',
@@ -571,9 +572,12 @@ def test_check_archives_with_max_duration_option_and_archives_check_runs_reposit
             max_duration=None,
         ),
         global_arguments=flexmock(),
-        checks={'repository', 'archives'},
+        checks=checks,
         archive_filter_flags=(),
     )
+
+    # The caller records a check time for each of these checks after they run.
+    assert checks == {'repository', 'archives'}
 
 
 def test_check_archives_with_max_duration_flag_and_archives_check_runs_repository_check_separately():
